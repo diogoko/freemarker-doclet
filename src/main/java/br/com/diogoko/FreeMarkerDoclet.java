@@ -1,18 +1,15 @@
 package br.com.diogoko;
 
-import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.DocErrorReporter;
 import com.sun.javadoc.RootDoc;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
-import org.apache.commons.lang3.RandomStringUtils;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.nio.file.Path;
 
 /**
  * Hello world!
