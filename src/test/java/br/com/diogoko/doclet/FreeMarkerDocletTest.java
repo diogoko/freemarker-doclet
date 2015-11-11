@@ -1,7 +1,5 @@
-package br.com.diogoko;
+package br.com.diogoko.doclet;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -45,7 +43,7 @@ public class FreeMarkerDocletTest
      * @param extraArgs Any extra arguments to Javadoc
      */
     private static void callJavadoc(String ...extraArgs) {
-        final String docletClass = "br.com.diogoko.FreeMarkerDoclet";
+        final String docletClass = "br.com.diogoko.doclet.FreeMarkerDoclet";
 
         Path root = getPathFromResources("source/java");
 

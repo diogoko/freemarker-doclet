@@ -1,4 +1,4 @@
-package br.com.diogoko;
+package br.com.diogoko.doclet;
 
 import com.sun.javadoc.DocErrorReporter;
 import com.sun.javadoc.RootDoc;
