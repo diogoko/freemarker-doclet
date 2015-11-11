@@ -6,14 +6,9 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
+import java.nio.charset.Charset;
 
-/**
- * Hello world!
- */
 public class FreeMarkerDoclet {
 
     private static String output = null;
@@ -24,7 +19,11 @@ public class FreeMarkerDoclet {
         try {
             Configuration cfg = createConfiguration();
             Template t = cfg.getTemplate(new File(template).getName());
-            Writer w = new FileWriter(new File(output));
+
+            File f = new File(output);
+            FileOutputStream fos = new FileOutputStream(f);
+            OutputStreamWriter w = new OutputStreamWriter(fos, Charset.forName("UTF-8"));
+
             t.process(root, w);
         } catch (Exception e) {
             e.printStackTrace();
