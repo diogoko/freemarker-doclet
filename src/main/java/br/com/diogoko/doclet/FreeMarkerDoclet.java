@@ -32,7 +32,7 @@ public class FreeMarkerDoclet {
     }
 
     private static Configuration createConfiguration() throws IOException {
-        Configuration cfg = new Configuration(Configuration.VERSION_2_3_22);
+        Configuration cfg = new Configuration(Configuration.VERSION_2_3_23);
         cfg.setDefaultEncoding("UTF-8");
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.DEBUG_HANDLER);
         template.configure(cfg);
