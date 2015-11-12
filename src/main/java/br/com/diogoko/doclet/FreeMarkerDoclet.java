@@ -13,12 +13,12 @@ public class FreeMarkerDoclet {
 
     private static String output = null;
 
-    private static String template = null;
+    private static TemplateOption template = null;
 
     public static boolean start(RootDoc root) {
         try {
             Configuration cfg = createConfiguration();
-            Template t = cfg.getTemplate(new File(template).getName());
+            Template t = cfg.getTemplate(template.getName());
 
             File f = new File(output);
             FileOutputStream fos = new FileOutputStream(f);
@@ -33,9 +33,9 @@ public class FreeMarkerDoclet {
 
     private static Configuration createConfiguration() throws IOException {
         Configuration cfg = new Configuration(Configuration.VERSION_2_3_22);
-        cfg.setDirectoryForTemplateLoading(new File(template).getParentFile());
         cfg.setDefaultEncoding("UTF-8");
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.DEBUG_HANDLER);
+        template.configure(cfg);
 
         return cfg;
     }
@@ -43,7 +43,9 @@ public class FreeMarkerDoclet {
     public static int optionLength(String option) {
         if (option.equals("-o")) {
             return 2;
-        } else if (option.equals("-t")) {
+        } else if (option.equals("-ft")) {
+            return 2;
+        } else if (option.equals("-ct")) {
             return 2;
         }
 
@@ -60,9 +62,12 @@ public class FreeMarkerDoclet {
             if (opt[0].equals("-o")) {
                 foundOutput = true;
                 output = opt[1];
-            } else if (opt[0].equals("-t")) {
+            } else if (opt[0].equals("-ft")) {
                 foundTemplate = true;
-                template = opt[1];
+                template = new FileTemplateOption(opt[1]);
+            } else if (opt[0].equals("-ct")) {
+                foundTemplate = true;
+                template = new ClasspathTemplateOption(opt[1]);
             }
         }
 

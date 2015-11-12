@@ -27,7 +27,19 @@ public class FreeMarkerDocletTest
         File templateFile = getPathFromResources("source/freemarker/singleFile/template.ftl").toFile();
         callJavadoc("com.sample",
                 "-o", outputFile.toString(),
-                "-t", templateFile.toString());
+                "-ft", templateFile.toString());
+
+        File expectedFile = getPathFromResources("expected-output/singleFile/output.html").toFile();
+        assertThat(outputFile).hasSameContentAs(expectedFile);
+    }
+
+    @Test
+    public void classTemplate() throws IOException {
+        File outputFile = outputDir.newFile();
+        String templateFile = "/source/freemarker/singleFile/template.ftl";
+        callJavadoc("com.sample",
+                "-o", outputFile.toString(),
+                "-ct", templateFile);
 
         File expectedFile = getPathFromResources("expected-output/singleFile/output.html").toFile();
         assertThat(outputFile).hasSameContentAs(expectedFile);
