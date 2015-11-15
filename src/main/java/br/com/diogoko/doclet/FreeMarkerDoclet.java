@@ -26,7 +26,12 @@ public class FreeMarkerDoclet {
 
             t.process(root, w);
         } catch (Exception e) {
-            e.printStackTrace();
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            root.printError(sw.toString());
+
+            return false;
         }
         return true;
     }

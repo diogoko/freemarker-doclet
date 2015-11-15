@@ -6,15 +6,8 @@ import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
 
 public class FreeMarkerDocletTest
 {
@@ -22,14 +15,15 @@ public class FreeMarkerDocletTest
     public TemporaryFolder outputDir = new TemporaryFolder();
 
     @Test
-    public void singleOutput() throws IOException {
+    public void fileTemplate() throws IOException {
         File outputFile = outputDir.newFile();
-        File templateFile = getPathFromResources("source/freemarker/singleFile/template.ftl").toFile();
-        callJavadoc("com.sample",
+        File templateFile = JavadocUtil.getPathFromResources("source/freemarker/singleFile/template.ftl").toFile();
+        JavadocResult result = callJavadoc("com.sample",
                 "-o", outputFile.toString(),
                 "-ft", templateFile.toString());
 
-        File expectedFile = getPathFromResources("expected-output/singleFile/output.html").toFile();
+        assertThat(result.getReturnCode()).isZero();
+        File expectedFile = JavadocUtil.getPathFromResources("expected-output/singleFile/output.html").toFile();
         assertThat(outputFile).hasSameContentAs(expectedFile);
     }
 
@@ -37,47 +31,42 @@ public class FreeMarkerDocletTest
     public void classTemplate() throws IOException {
         File outputFile = outputDir.newFile();
         String templateFile = "/source/freemarker/singleFile/template.ftl";
-        callJavadoc("com.sample",
+        JavadocResult result = callJavadoc("com.sample",
                 "-o", outputFile.toString(),
                 "-ct", templateFile);
 
-        File expectedFile = getPathFromResources("expected-output/singleFile/output.html").toFile();
+        assertThat(result.getReturnCode()).isZero();
+        File expectedFile = JavadocUtil.getPathFromResources("expected-output/singleFile/output.html").toFile();
         assertThat(outputFile).hasSameContentAs(expectedFile);
     }
 
-    /**
-     * Calls Javadoc tool.
-     *
-     * <p>The arguments needed to call this project's doclet
-     * and use the test resource's directory as source path
-     * are already included.</p>
-     *
-     * @param extraArgs Any extra arguments to Javadoc
-     */
-    private static void callJavadoc(String ...extraArgs) {
-        final String docletClass = "br.com.diogoko.doclet.FreeMarkerDoclet";
+    @Test
+    public void include() throws IOException {
+        File outputFile = outputDir.newFile();
+        String templateFile = "/source/freemarker/include/index.ftl";
+        JavadocResult result = callJavadoc("com.sample",
+                "-o", outputFile.toString(),
+                "-ct", templateFile);
 
-        Path root = getPathFromResources("source/java");
-
-        List<String> baseArgs = Arrays.asList(
-                "-doclet", docletClass,
-                "-sourcepath", root.toString()
-        );
-        List<String> args = new LinkedList<String>(baseArgs);
-        for (String arg : extraArgs) {
-            args.add(arg);
-        }
-
-        com.sun.tools.javadoc.Main.execute(args.toArray(new String[0]));
+        assertThat(result.getReturnCode()).isZero();
+        File expectedFile = JavadocUtil.getPathFromResources("expected-output/include/output.html").toFile();
+        assertThat(outputFile).hasSameContentAs(expectedFile);
     }
 
-    private static Path getPathFromResources(String path) {
-        try {
-            Path root = Paths.get(FreeMarkerDocletTest.class.getResource("/root.txt").toURI())
-                    .getParent();
-            return root.resolve(path);
-        } catch (URISyntaxException e) {
-            throw new IllegalStateException("This should never happen", e);
-        }
+    @Test
+    public void error() throws IOException {
+        File outputFile = outputDir.newFile();
+        String templateFile = "/source/freemarker/error/template.ftl";
+        JavadocResult result = callJavadoc("com.sample",
+                "-o", outputFile.toString(),
+                "-ct", templateFile);
+
+        assertThat(result.getReturnCode()).isNotZero();
+        assertThat(result.getErr()).contains("Unknown directive");
+    }
+
+    private static JavadocResult callJavadoc(String... extraArgs) {
+        final String docletClass = "br.com.diogoko.doclet.FreeMarkerDoclet";
+        return JavadocUtil.callJavadoc(docletClass, extraArgs);
     }
 }
