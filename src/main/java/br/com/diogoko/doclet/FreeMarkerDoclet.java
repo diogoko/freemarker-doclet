@@ -52,6 +52,8 @@ public class FreeMarkerDoclet {
             return 2;
         } else if (option.equals("-ct")) {
             return 2;
+        } else if (option.equals("-extra")) {
+            return 3;
         }
 
         return 0;

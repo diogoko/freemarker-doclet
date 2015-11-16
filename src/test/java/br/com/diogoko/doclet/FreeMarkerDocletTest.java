@@ -65,6 +65,21 @@ public class FreeMarkerDocletTest
         assertThat(result.getErr()).contains("Unknown directive");
     }
 
+    @Test
+    public void extraArgs() throws IOException {
+        File outputFile = outputDir.newFile();
+        String templateFile = "/source/freemarker/extraArgs/template.ftl";
+        JavadocResult result = callJavadoc("com.sample",
+                "-o", outputFile.toString(),
+                "-ct", templateFile,
+                "-extra", "title", "Example",
+                "-extra", "phone", "555-5555");
+
+        assertThat(result.getReturnCode()).isZero();
+        File expectedFile = JavadocUtil.getPathFromResources("expected-output/extraArgs/output.html").toFile();
+        assertThat(outputFile).hasSameContentAs(expectedFile);
+    }
+
     private static JavadocResult callJavadoc(String... extraArgs) {
         final String docletClass = "br.com.diogoko.doclet.FreeMarkerDoclet";
         return JavadocUtil.callJavadoc(docletClass, extraArgs);
