@@ -13,11 +13,11 @@ public class ClasspathTemplateOption implements TemplateOption {
 
     @Override
     public String getName() {
-        return new File(path).getName();
+        return path;
     }
 
     @Override
     public void configure(Configuration cfg) {
-        cfg.setClassForTemplateLoading(this.getClass(), new File(path).getParentFile().toString());
+        cfg.setClassForTemplateLoading(this.getClass(), "/");
     }
 }

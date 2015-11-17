@@ -54,6 +54,19 @@ public class FreeMarkerDocletTest
     }
 
     @Test
+    public void absoluteIncludeClasspath() throws IOException {
+        File outputFile = outputDir.newFile();
+        String templateFile = "/source/freemarker/include/absoluteIndex.ftl";
+        JavadocResult result = callJavadoc("com.sample",
+                "-o", outputFile.toString(),
+                "-ct", templateFile);
+
+        assertThat(result.getReturnCode()).isZero();
+        File expectedFile = JavadocUtil.getPathFromResources("expected-output/include/output.html").toFile();
+        assertThat(outputFile).hasSameContentAs(expectedFile);
+    }
+
+    @Test
     public void error() throws IOException {
         File outputFile = outputDir.newFile();
         String templateFile = "/source/freemarker/error/template.ftl";
