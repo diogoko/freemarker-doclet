@@ -14,13 +14,14 @@ public class FileTemplateOption implements TemplateOption {
 
     @Override
     public String getName() {
-        return new File(path).getName();
+        return path;
     }
 
     @Override
     public void configure(Configuration cfg) {
         try {
-            cfg.setDirectoryForTemplateLoading(new File(path).getParentFile());
+            // TODO: handle Windows roots
+            cfg.setDirectoryForTemplateLoading(new File("/"));
         } catch (IOException e) {
             throw new RuntimeException("Error while configuring file template: " + path, e);
         }

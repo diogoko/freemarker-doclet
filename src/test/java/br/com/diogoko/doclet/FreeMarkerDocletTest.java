@@ -1,5 +1,6 @@
 package br.com.diogoko.doclet;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -60,6 +61,29 @@ public class FreeMarkerDocletTest
         JavadocResult result = callJavadoc("com.sample",
                 "-o", outputFile.toString(),
                 "-ct", templateFile);
+
+        assertThat(result.getReturnCode()).isZero();
+        File expectedFile = JavadocUtil.getPathFromResources("expected-output/include/output.html").toFile();
+        assertThat(outputFile).hasSameContentAs(expectedFile);
+    }
+
+    @Test
+    public void absoluteIncludeFile() throws IOException {
+        File functionsFile = JavadocUtil.getPathFromResources("source/freemarker/include/functions.ftl").toFile();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("<#include \"");
+        sb.append(functionsFile.toString());
+        sb.append("\">\n");
+        sb.append("<p>The sum of 3 with 5 is ${my_sum(3, 5)}</p>");
+
+        File templateFile = outputDir.newFile();
+        FileUtils.writeStringToFile(templateFile, sb.toString());
+
+        File outputFile = outputDir.newFile();
+        JavadocResult result = callJavadoc("com.sample",
+                "-o", outputFile.toString(),
+                "-ft", templateFile.toString());
 
         assertThat(result.getReturnCode()).isZero();
         File expectedFile = JavadocUtil.getPathFromResources("expected-output/include/output.html").toFile();
