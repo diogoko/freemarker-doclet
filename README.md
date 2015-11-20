@@ -40,7 +40,7 @@ Most of the time you'll probably use templates from the classpath:
             <docletArtifact>
                 <groupId>br.com.diogoko</groupId>
                 <artifactId>freemarker-doclet</artifactId>
-                <version>1.0.0</version>
+                <version>1.1.0</version>
             </docletArtifact>
         </docletArtifacts>
 
@@ -64,7 +64,7 @@ Nevertheless, you can also use templates from the file system:
             <docletArtifact>
                 <groupId>br.com.diogoko</groupId>
                 <artifactId>freemarker-doclet</artifactId>
-                <version>1.0.0</version>
+                <version>1.1.0</version>
             </docletArtifact>
         </docletArtifacts>
 
