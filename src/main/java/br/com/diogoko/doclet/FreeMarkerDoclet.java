@@ -16,9 +16,9 @@ public class FreeMarkerDoclet {
 
     private static TemplateOption template = null;
 
-	public static LanguageVersion languageVersion() {
-		return LanguageVersion.JAVA_1_5;
-	}
+    public static LanguageVersion languageVersion() {
+        return LanguageVersion.JAVA_1_5;
+    }
     
     public static boolean start(RootDoc root) {
         try {
